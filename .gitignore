@@ -1,5 +1,6 @@
 # venv / IDE
 .venv/
+venv/
 .env
 .env.*.local
 .vscode/
