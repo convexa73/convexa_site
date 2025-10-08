@@ -1,22 +1,31 @@
-# venv / IDE
-.venv/
-venv/
-.env
-.env.*.local
-.vscode/
-.idea/
-
-# Django
+# Python
 __pycache__/
 *.py[cod]
-*.sqlite3
-media/
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
 
-# Static collect (gerado no build)
-staticfiles/
+# Virtual envs
+.venv/
+venv/
+env/
 
-# macOS
+# OS/editor
 .DS_Store
+.idea/
+.vscode/
 
-# Logs
-*.log
+# Django
+staticfiles/
+media/
+*.sqlite3
+
+# Secrets
+.env
+*.env
+google-credentials.json
+
+# Node (se usar no futuro)
+node_modules/
