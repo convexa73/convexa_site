@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+	/* Estilos para o container do chat */
+	#chat-container {
+		border: 1px solid #ccc;
+		height: 50vh; /* Altura de 50% da tela */
+		padding: 10px;
+		margin-top: 1rem;
+		overflow-y: auto; /* Adiciona barra de rolagem quando o conteúdo passar da altura */
+		display: flex;
+		flex-direction: column;
+		background-color: #f9f9f9;
+	}
+
+	/* Estilos para as bolhas de mensagem */
+	.message-bubble {
+		max-width: 70%;
+		padding: 10px 15px;
+		border-radius: 18px;
+		margin-bottom: 10px;
+		line-height: 1.4;
+	}
+
+	/* Bolha para as mensagens do usuário (à direita) */
+	.user-message {
+		background-color: #007bff;
+		color: white;
+		align-self: flex-end; /* Alinha à direita */
+		border-bottom-right-radius: 4px;
+	}
+
+	/* Bolha para as mensagens da IA (à esquerda) */
+	.ai-message {
+		background-color: #e9e9eb;
+		color: #333;
+		align-self: flex-start; /* Alinha à esquerda */
+		border-bottom-left-radius: 4px;
+	}
+</style>
+
+<h1>Conversando com {{ ai_model_name }}</h1>
+
+<div id="chat-container">
+	<div class="message-bubble ai-message">Olá! Como posso te ajudar hoje?</div>
+</div>
+
+<div id="input-container" style="display: flex; margin-top: 1rem;">
+	<input type="text" id="user-input" placeholder="Digite sua mensagem..." style="flex-grow: 1; padding: 10px;" autocomplete="off">
+	<button id="send-btn" style="padding: 10px;">Enviar</button>
+</div>
+
+<a href="{% url 'ia_hub' %}" style="display: block; margin-top: 1rem;">&larr; Voltar para a escolha</a>
+
+<script>
+	// Pega os elementos do HTML
+	const chatContainer = document.getElementById('chat-container');
+	const userInput = document.getElementById('user-input');
+	const sendBtn = document.getElementById('send-btn');
+
+	// Pega o token CSRF do Django para segurança
+	const csrfToken = '{{ csrf_token }}';
+
+	// Função para adicionar uma mensagem na tela
+	function addMessage(text, sender) {
+		const messageBubble = document.createElement('div');
+		messageBubble.classList.add('message-bubble');
+		messageBubble.classList.add(sender + '-message'); // 'user-message' ou 'ai-message'
+		messageBubble.innerText = text;
+		chatContainer.appendChild(messageBubble);
+		// Rola o chat para a última mensagem
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
+
+	// Função principal que envia a pergunta para o backend
+	async function sendMessage() {
+		const userMessage = userInput.value.trim();
+		if (userMessage === "") {
+			return; // Não envia mensagens vazias
+		}
+
+		// 1. Adiciona a mensagem do usuário na tela
+		addMessage(userMessage, 'user');
+		userInput.value = ''; // Limpa o campo de input
+
+		// Mostra uma mensagem de "pensando..."
+		addMessage("Pensando...", 'ai');
+
+		try {
+			// 2. Envia a mensagem para a nossa view 'process_ai_query' no Django
+			const response = await fetch("{% url 'process_ai_query' %}", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': csrfToken // Envia o token de segurança
+				},
+				body: JSON.stringify({
+					'message': userMessage,
+					'ai_model': '{{ ai_model }}' // Informa qual IA deve ser usada
+				})
+			});
+
+			// Remove a mensagem de "pensando..."
+			chatContainer.removeChild(chatContainer.lastChild);
+
+			if (!response.ok) {
+				throw new Error('A resposta da rede não foi OK.');
+			}
+
+			const data = await response.json();
+
+			// 3. Adiciona a resposta da IA na tela
+			addMessage(data.answer, 'ai');
+
+		} catch (error) {
+			console.error('Erro:', error);
+			addMessage("Desculpe, ocorreu um erro ao processar sua pergunta.", 'ai');
+		}
+	}
+
+	// Adiciona os "event listeners" para o botão e para a tecla Enter
+	sendBtn.addEventListener('click', sendMessage);
+	userInput.addEventListener('keyup', function(event) {
+		if (event.key === 'Enter') {
+			sendMessage();
+		}
+	});
+
+</script>
+{% endblock %}

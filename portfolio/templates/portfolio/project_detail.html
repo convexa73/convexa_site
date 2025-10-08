@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<style>
+		.project-detail-container { max-width: 800px; margin: auto; }
+		.project-detail-container img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 2rem; }
+		.project-tech { font-style: italic; color: #555; }
+	</style>
+
+	<div class="project-detail-container">
+		<h1>{{ project.title }}</h1>
+
+		<p class="project-tech">Tecnologias: {{ project.technologies }}</p>
+
+		{% if project.image %}
+			<img src="{{ project.image.url }}" alt="{{ project.title }}">
+		{% endif %}
+
+		<div>
+			{{ project.description|linebreaks }}
+		</div>
+
+		{% if project.project_url %}
+			<p><a href="{{ project.project_url }}" target="_blank">Ver o projeto online</a></p>
+		{% endif %}
+
+		<hr>
+		<a href="{% url 'project_list' %}">&larr; Voltar para o Portfólio</a>
+	</div>
+{% endblock %}

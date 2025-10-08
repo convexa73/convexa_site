@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Pesquisa com IA</h1>
+<p>Escolha uma das plataformas abaixo para iniciar uma conversa.</p>
+
+<div style="display: flex; gap: 20px; margin-top: 2rem;">
+	<a href="{% url 'chat_page' 'gemini' %}" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; text-decoration: none; color: inherit;">
+		<h2>Google Gemini</h2>
+		<p>Converse com o modelo de IA do Google.</p>
+	</a>
+	<a href="{% url 'chat_page' 'chatgpt' %}" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; text-decoration: none; color: inherit;">
+		<h2>OpenAI ChatGPT</h2>
+		<p>Converse com o modelo de IA da OpenAI.</p>
+	</a>
+</div>
+{% endblock %}

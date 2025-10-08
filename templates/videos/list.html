@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Vídeos — {{ SITE_SETTINGS.site_name|default:"Convexa" }}{% endblock %}
+{% block content %}
+  <section>
+    <h1 style="margin-top:0">Vídeos</h1>
+    {% if videos %}
+      <div class="grid video-cards">
+        {% for v in videos %}
+          <article class="vcard">
+            <h3 class="vtitle"><a href="{{ v.get_absolute_url }}">{{ v.title }}</a></h3>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="pager">
+          {% if page_obj.has_previous %}
+            <a class="btn" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+          {% endif %}
+          <span class="muted">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a class="btn" href="?page={{ page_obj.next_page_number }}">Próxima</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="muted">Nenhum vídeo ainda.</p>
+    {% endif %}
+  </section>
+{% endblock %}

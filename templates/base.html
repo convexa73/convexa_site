@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ SITE_SETTINGS.site_name|default:"Convexa" }}{% endblock %}</title>
+<link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="any">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<style>
+:root{
+  --bg: {{ SITE_THEME.color1|default:"#0b1020" }};
+  --accent1: {{ SITE_THEME.color2|default:"#0d61a5" }};
+  --accent2: {{ SITE_THEME.color3|default:"#00879a" }};
+  --fg: {{ SITE_THEME.color4|default:"#e8eefc" }};
+  --muted: {{ SITE_THEME.color5|default:"#9fb3d1" }};
+}
+.logo-text{
+  {% if SITE_SETTINGS.use_gradient_logo_text %}
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  {% else %}
+    color: var(--fg);
+  {% endif %}
+  font-weight: 800; letter-spacing: .2px;
+}
+</style>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <img src="{% static 'img/logo-convexa-icone.png' %}" width="36" height="36" alt="Logo Convexa" loading="lazy">
+        <span class="logo-text">{{ SITE_SETTINGS.site_name|default:"Convexa" }}</span>
+      </a>
+      <nav class="site-nav" aria-label="Menu principal">
+        <a href="/">Home</a>
+        <a href="/#servicos">Serviços</a>
+        <a href="/#videos">Vídeos</a>
+        <a href="/ia/">IA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small class="muted">© {{ SITE_SETTINGS.site_name|default:"Convexa" }} — desde {{ SITE_SETTINGS.founded|date:"Y"|default:"2011" }}</small>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<ul>
+	{% for item in menu_items %}
+		<li>
+			{% if item.page %}
+				<a href="{% url 'page_detail' item.page.slug %}" {% if item.open_in_new_tab %}target="_blank"{% endif %}>{{ item.title }}</a>
+			{% elif item.external_url %}
+				<a href="{{ item.external_url }}" {% if item.open_in_new_tab %}target="_blank"{% endif %}>{{ item.title }}</a>
+			{% endif %}
+		</li>
+	{% endfor %}
+</ul>

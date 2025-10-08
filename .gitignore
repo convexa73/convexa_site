@@ -1,0 +1,21 @@
+# venv / IDE
+.venv/
+.env
+.env.*.local
+.vscode/
+.idea/
+
+# Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+media/
+
+# Static collect (gerado no build)
+staticfiles/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log

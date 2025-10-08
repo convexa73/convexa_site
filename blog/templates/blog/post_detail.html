@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<style>
+		.video-container {
+			position: relative;
+			padding-bottom: 56.25%; /* Proporção 16:9 */
+			height: 0;
+			overflow: hidden;
+			max-width: 100%;
+			background: #000;
+			margin-bottom: 1.5rem;
+		}
+		.video-container iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+
+	<article>
+		<h1>{{ post.title }}</h1>
+		<p><em>Por {{ post.author }} em {{ post.publication_date|date:"d/m/Y" }}</em></p>
+
+		{% if post.youtube_video_id %}
+			<div class="video-container">
+				<iframe 
+					src="https://www.youtube.com/embed/{{ post.youtube_video_id }}" 
+					frameborder="0" 
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+					allowfullscreen>
+				</iframe>
+			</div>
+		{% elif post.cover_image %}
+			<img src="{{ post.cover_image.url }}" alt="{{ post.title }}" style="width:100%; height:auto; margin-bottom: 1.5rem;">
+		{% endif %}
+
+		<div>
+			{{ post.content|linebreaks }}
+		</div>
+	</article>
+
+	<hr>
+	<a href="{% url 'post_list' %}">&larr; Voltar para o Blog</a>
+{% endblock %}

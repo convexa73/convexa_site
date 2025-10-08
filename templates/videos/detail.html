@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} — Vídeos — {{ SITE_SETTINGS.site_name|default:"Convexa" }}{% endblock %}
+{% block content %}
+  <article>
+    <h1 style="margin-top:0">{{ object.title }}</h1>
+    <div style="position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000">
+      <iframe src="https://www.youtube-nocookie.com/embed/{{ object.video_id }}?rel=0"
+              title="{{ object.title }}"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              loading="lazy"
+              style="width:100%;height:100%;border:0;"></iframe>
+    </div>
+
+    {% if object.original_description %}
+      <section style="margin-top:16px">
+        <h2>Descrição completa</h2>
+        <pre style="white-space:pre-wrap;background:#0f1733;border:1px solid rgba(255,255,255,.06);padding:12px;border-radius:12px;color:var(--fg)">{{ object.original_description }}</pre>
+      </section>
+    {% else %}
+      <p class="muted" style="margin-top:16px">Sem descrição disponível.</p>
+    {% endif %}
+  </article>
+{% endblock %}

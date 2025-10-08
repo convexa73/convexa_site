@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ SITE_SETTINGS.site_name|default:"Convexa" }} — Soluções em TI e IA{% endblock %}
+{% block content %}
+  <section>
+    <h1 style="margin-top:0">Tecnologia que resolve. <span class="logo-text">Convexa</span></h1>
+    <p class="muted" style="max-width:60ch">
+      Consultoria, redes estruturadas, gestão de servidores e desenvolvimento —
+      com <strong>IA aplicada</strong> para automatizar rotinas e acelerar resultados.
+    </p>
+  </section>
+
+  <section id="servicos" style="margin-top:24px">
+    <h2>Serviços</h2>
+    {% if services %}
+      <div class="grid cards">
+        {% for s in services %}
+          <article class="card">
+            <h3>{{ s.title }}</h3>
+            <p class="muted">{{ s.summary }}</p>
+            <a class="btn" href="/servicos/{{ s.slug }}/">Saiba mais</a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">Cadastre serviços no admin.</p>
+    {% endif %}
+  </section>
+
+  <section id="videos" style="margin-top:24px">
+    <div style="display:flex;align-items:baseline;gap:12px;justify-content:space-between">
+      <h2>Últimos vídeos</h2>
+      <a class="btn" href="/videos/">Ver todos</a>
+    </div>
+
+    {% if videos %}
+      <div class="grid video-cards">
+        {% for v in videos %}
+          <article class="vcard vcard-thumb">
+            <a href="{{ v.get_absolute_url }}">
+              <img class="vthumb" loading="lazy"
+                   src="https://img.youtube.com/vi/{{ v.video_id }}/hqdefault.jpg"
+                   alt="Miniatura do vídeo {{ v.title|default:'Vídeo' }}">
+              <h3 class="vtitle">{{ v.title }}</h3>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">Adicione vídeos no admin.</p>
+    {% endif %}
+  </section>
+{% endblock %}
